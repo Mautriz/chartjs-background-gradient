@@ -16,32 +16,20 @@ const data = (canvas, meta) => {
   const endX = meta.dataset._children[length - 1]._model.x;
   const graphLength = endX - startX;
 
-  const gradientStroke = ctx.createLinearGradient(
-    meta.dataset._children[0]._model.x,
-    0,
-    meta.dataset._children[length - 1]._model.x,
-    0
-  );
+  const gradientStroke = ctx.createLinearGradient(startX, 0, endX, 0);
   const colors = ["#666666", "#999999"];
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 1; i < length; i++) {
     const xPos = (meta.dataset._children[i]._model.x - startX) / graphLength;
-    if (i === 0) {
-      gradientStroke.addColorStop(0, colors[i % 2]);
-      gradientStroke.addColorStop(xPos, colors[i % 2]);
-    } else {
-      const xPos2 =
-        (meta.dataset._children[i - 1]._model.x - startX) / graphLength;
-      gradientStroke.addColorStop(xPos, colors[i % 2]);
-      gradientStroke.addColorStop(xPos2, colors[i % 2]);
-    }
+    const xPos2 =
+      (meta.dataset._children[i - 1]._model.x - startX) / graphLength;
+    gradientStroke.addColorStop(xPos, colors[i % 2]);
+    gradientStroke.addColorStop(xPos2, colors[i % 2]);
   }
-  const options = canvasOptions(gradientStroke);
-  console.log(options);
-  return options;
+  return canvasOptions(gradientStroke);
 };
 
-function Graph() {
+const Graph = () => {
   const [graphOpts, setGraphOpts] = useState(preOptions);
   let lineref;
   let canvas;
@@ -61,6 +49,6 @@ function Graph() {
       <Line ref={ref => (lineref = ref)} {...graphOpts} />
     </Wrapper>
   );
-}
+};
 
 export default Graph;
