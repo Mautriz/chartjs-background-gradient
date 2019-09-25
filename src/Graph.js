@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 
 const canvas = document.createElement("canvas");
 
-const data = (canvas, meta) => {
+const data = (canvas, meta, setGraphOpts) => {
   const ctx = canvas.getContext("2d");
   const length = meta.dataset._children.length;
   const startX = meta.dataset._children[0]._model.x;
@@ -27,7 +27,7 @@ const data = (canvas, meta) => {
     gradientStroke.addColorStop(xPos, colors[i % 2]);
     gradientStroke.addColorStop(xPos2, colors[i % 2]);
   }
-  return canvasOptions(gradientStroke);
+  setGraphOpts(canvasOptions(gradientStroke));
 };
 
 const Graph = () => {
@@ -37,8 +37,13 @@ const Graph = () => {
 
   React.useEffect(() => {
     const meta = secondLineRef.current.chartInstance.getDatasetMeta(0);
-    const chartProps = data(canvas, meta);
-    setGraphOpts(chartProps);
+    const resizeFunc = () => {
+      data(canvas, meta, setGraphOpts);
+    };
+    resizeFunc();
+    window.addEventListener("resize", resizeFunc);
+
+    return () => window.removeEventListener("resize", resizeFunc);
   }, []);
 
   return (
