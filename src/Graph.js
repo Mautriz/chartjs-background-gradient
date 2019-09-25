@@ -6,6 +6,9 @@ import { canvasOptions, preOptions } from "./options/canvasOptions";
 const Wrapper = styled.div`
   width: 50vw;
   height: 50vh;
+  ${Line} {
+    transform: translate(50%, 50%);
+  }
 `;
 
 const canvas = document.createElement("canvas");
