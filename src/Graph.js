@@ -8,7 +8,8 @@ const Wrapper = styled.div`
   height: 50vh;
 `;
 
-// Configuration options go her
+const canvas = document.createElement("canvas");
+
 const data = (canvas, meta) => {
   const ctx = canvas.getContext("2d");
   const length = meta.dataset._children.length;
@@ -31,22 +32,18 @@ const data = (canvas, meta) => {
 
 const Graph = () => {
   const [graphOpts, setGraphOpts] = useState(preOptions);
-  let lineref;
-  let canvas;
-  let meta;
-  let chartProps;
+  const secondLineRef = React.useRef();
   //   const meta = lineref.chartInstance.getDatasetMeta(0);
 
   React.useEffect(() => {
-    meta = lineref.chartInstance.getDatasetMeta(0);
-    canvas = document.createElement("canvas");
-    chartProps = data(canvas, meta);
+    const meta = secondLineRef.current.chartInstance.getDatasetMeta(0);
+    const chartProps = data(canvas, meta);
     setGraphOpts(chartProps);
   }, []);
 
   return (
     <Wrapper>
-      <Line ref={ref => (lineref = ref)} {...graphOpts} />
+      <Line ref={secondLineRef} {...graphOpts} />
     </Wrapper>
   );
 };
